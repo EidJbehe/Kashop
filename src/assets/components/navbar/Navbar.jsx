@@ -15,6 +15,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Button } from "@mui/material";
 import NavLogo from "./navbarImages/Logo-navbar.svg";
+import { useNavigate } from "react-router-dom";
 
 // Search Style
 const Search = styled("div")(({ theme }) => ({
@@ -49,9 +50,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar() {
+    const navigate = useNavigate();
   const [mobileAnchor, setMobileAnchor] = useState(null);
 
-  const links = ["Home", "About", "Contact Us", "Login", "Sign Up"];
+  const links = [
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+  { name: "Contact Us", path: "/contact" },
+  { name: "Login", path: "/login" },
+  { name: "Sign Up", path: "/register" },
+];
   const isMobileOpen = Boolean(mobileAnchor);
 
   const handleMobileOpen = (event) => setMobileAnchor(event.currentTarget);
@@ -76,18 +84,20 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 2 }}>
             {links.map((link) => (
-              <Button
-                key={link}
-                sx={{
-                  color: "#000",
-                  textTransform: "none",
-                  fontWeight: 500,
-                  "&:hover": { backgroundColor: "transparent", color: "#FF5722" },
-                }}
-              >
-                {link}
-              </Button>
-            ))}
+  <Button
+    key={link.name}
+    onClick={() => navigate(link.path)}
+    sx={{
+      color: "#000",
+      textTransform: "none",
+      fontWeight: 500,
+      "&:hover": { backgroundColor: "transparent", color: "#FF5722" },
+    }}
+  >
+    {link.name}
+  </Button>
+))}
+
 
             {/* Icons */}
             <IconButton size="large" aria-label="Favorites" color="inherit">
@@ -138,10 +148,17 @@ export default function Navbar() {
         onClose={handleMobileClose}
       >
         {links.map((link) => (
-          <MenuItem key={link} onClick={handleMobileClose}>
-            <Typography textAlign="center">{link}</Typography>
-          </MenuItem>
-        ))}
+  <MenuItem
+    key={link.name}
+    onClick={() => {
+      navigate(link.path);
+      handleMobileClose();
+    }}
+  >
+    <Typography textAlign="center">{link.name}</Typography>
+  </MenuItem>
+))}
+
       </Menu>
     </Box>
   );

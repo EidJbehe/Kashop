@@ -5,7 +5,8 @@ import Cart from "./assets/pages/cart/Cart.jsx";
 import AuthLayout from "./layout/AuthLayout.jsx";
 import Login from './assets/pages/login/Login';
 import Register from './assets/pages/register/Register';
-
+import About from './assets/pages/about/About.jsx';
+import Contact from './assets/pages/contact/Contact.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -18,13 +19,7 @@ const router = createBrowserRouter([
         {
             path:"cart",
             element:<Cart/>
-        }
-    ]
-  },
-  {
-    path: "/auth",
-    element: <AuthLayout/>,
-    children:[
+        },
         {
             path:"login",
             element:<Login />
@@ -32,8 +27,30 @@ const router = createBrowserRouter([
         {
             path:"register",
             element:<Register/>
+        },
+         {
+            path:"about",
+            element:<About/>
+        },
+        {
+            path:"contact",
+            element:<Contact/>
         }
-    ]
-  }
+    ]}
+  // },
+  // {
+  //   path: "/auth",
+  //   element: <AuthLayout/>,
+  //   children:[
+  //       {
+  //           path:"login",
+  //           element:<Login />
+  //       },
+  //       {
+  //           path:"register",
+  //           element:<Register/>
+  //       }
+  //   ]
+  // }
 ]);
 export default router;

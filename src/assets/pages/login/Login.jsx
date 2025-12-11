@@ -3,6 +3,8 @@ import { Box, Button, Link, Typography, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios"; 
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import {Link as RouterLink} from "react-router-dom";
+
 
 
 export default function Login() {
@@ -108,19 +110,20 @@ export default function Login() {
         </Button>
 
         
-        <Typography sx={{ textAlign: "center", mt: 2, color: "#444" }}>
-          Don't have an account?{" "}
-          <Link
-            href="/register"
-            sx={{
-              textDecoration: "none",
-              color: "#000",
-              fontWeight: "bold",
-            }}
-          >
-            Sign Up
-          </Link>
-        </Typography>
+       <Typography sx={{ textAlign: "center", mt: 2, color: "#444" }}>
+  Don't have an account?{" "}
+  <Link   component={RouterLink}
+    to="/register"
+    style={{
+      textDecoration: "none",
+      color: "#000",
+      fontWeight: "bold",
+    }}
+  >
+    Sign Up
+  </Link>
+</Typography>
+
       </Box>
     </Box>
   );

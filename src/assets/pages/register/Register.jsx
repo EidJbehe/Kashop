@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Button, Link, Typography, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import {Link as RouterLink} from "react-router-dom";
 
 export default function Register() {
   const { register, handleSubmit } = useForm({});
@@ -113,18 +114,20 @@ console.log("SERVER ERROR:", e.response?.data);    }
 
         
         <Typography sx={{ textAlign: "center", mt: 2, color: "#444" }}>
-          Already have an account?{" "}
-          <Link
-            href="/login"
-            sx={{
-              textDecoration: "none",
-              color: "#000",
-              fontWeight: "bold",
-            }}
-          >
-            Login
-          </Link>
-        </Typography>
+  Already have an account?{" "}
+  <Link
+    component={RouterLink}
+    to="/login"
+    underline="none"
+    sx={{
+      color: "#000",
+      fontWeight: "bold",
+    }}
+  >
+    Login
+  </Link>
+</Typography>
+
       </Box>
     </Box>
   );

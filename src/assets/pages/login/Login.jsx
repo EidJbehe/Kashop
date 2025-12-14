@@ -1,16 +1,21 @@
 import React, { useState } from "react";
-import { Box, Button, Link, Typography, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Link,
+  Typography,
+  TextField,
+  CircularProgress,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
-import axios from "axios"; 
-import LockOpenIcon from '@mui/icons-material/LockOpen';
+import axios from "axios";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { Link as RouterLink } from "react-router-dom";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginSchema } from "../../validations/LoginShema.js";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-
-
-
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import SendCode from "../sendCode/SendCode.jsx";
 
 export default function Login() {
   const [serverErrors, setServerErrors] = useState([]);
@@ -19,8 +24,13 @@ export default function Login() {
       setServerErrors([]);
     }
   };
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(LoginSchema), mode: "onBlur"
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(LoginSchema),
+    mode: "onBlur",
   });
 
   const loginForm = async (values) => {
@@ -60,7 +70,6 @@ export default function Login() {
           boxShadow: 3,
         }}
       >
-       
         <Typography
           variant="h5"
           sx={{
@@ -70,9 +79,9 @@ export default function Login() {
             color: "#000",
           }}
         >
-         Login
+          Login
         </Typography>
-         {serverErrors.length > 0 && (
+        {serverErrors.length > 0 && (
           <Box
             sx={{
               mb: 2,
@@ -88,9 +97,7 @@ export default function Login() {
                 sx={{ display: "flex", alignItems: "center", mb: 1 }}
               >
                 <ErrorOutlineIcon sx={{ color: "#d32f2f", mr: 1 }} />
-                <Typography sx={{ color: "#d32f2f" }}>
-                  {error}
-                </Typography>
+                <Typography sx={{ color: "#d32f2f" }}>{error}</Typography>
               </Box>
             ))}
           </Box>
@@ -105,7 +112,8 @@ export default function Login() {
           variant="outlined"
           sx={{ mb: 2 }}
           onChange={clearServerErrors}
-          error={errors.email} helperText={ errors.email?errors.email.message:""}
+          error={errors.email}
+          helperText={errors.email ? errors.email.message : ""}
         />
         <TextField
           fullWidth
@@ -115,25 +123,35 @@ export default function Login() {
           variant="outlined"
           sx={{ mb: 2 }}
           onChange={clearServerErrors}
-          error={errors.password} helperText={ errors.password?errors.password.message:""}
+          error={errors.password}
+          helperText={errors.password ? errors.password.message : ""}
         />
-        <Box sx={{ textAlign: "right", mb: 3, display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 0.5 }}>
-  <LockOpenIcon  sx={{ fontSize: 16, color: "#888" }} />
-  <Link
-    href="/forget-password"
-    sx={{
-      fontSize: "14px",
-      textDecoration: "none",
-      color: "#888",
-      "&:hover": { color: "#000", textDecoration: "underline" },
-      fontWeight: "bold",
-    }}
-  >
-    Forget Password?
-  </Link>
-</Box>
+        <Box
+          sx={{
+            textAlign: "right",
+            mb: 3,
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: 0.5,
+          }}
+        >
+          <LockOpenIcon sx={{ fontSize: 16, color: "#888" }} />
+          <Link
+            component={RouterLink}
+            to="/SendCode"
+            sx={{
+              fontSize: "14px",
+              textDecoration: "none",
+              color: "#888",
+              "&:hover": { color: "#000", textDecoration: "underline" },
+              fontWeight: "bold",
+            }}
+          >
+            Forget Password?
+          </Link>
+        </Box>
 
-      
         <Button
           fullWidth
           type="submit"
@@ -146,25 +164,29 @@ export default function Login() {
             textTransform: "none",
             borderRadius: "8px",
           }}
+          disabled={isSubmitting}
         >
-         Login
+          {isSubmitting ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            "Login"
+          )}
         </Button>
 
-        
-       <Typography sx={{ textAlign: "center", mt: 2, color: "#444" }}>
-  Don't have an account?{" "}
-  <Link   component={RouterLink}
-    to="/register"
-    style={{
-      textDecoration: "none",
-      color: "#000",
-      fontWeight: "bold",
-    }}
-  >
-    Sign Up
-  </Link>
-</Typography>
-
+        <Typography sx={{ textAlign: "center", mt: 2, color: "#444" }}>
+          Don't have an account?{" "}
+          <Link
+            component={RouterLink}
+            to="/register"
+            style={{
+              textDecoration: "none",
+              color: "#000",
+              fontWeight: "bold",
+            }}
+          >
+            Sign Up
+          </Link>
+        </Typography>
       </Box>
     </Box>
   );

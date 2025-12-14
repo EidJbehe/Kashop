@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Link, Typography, TextField } from "@mui/material";
+import { Box, Button, Link, Typography, TextField, CircularProgress } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link as RouterLink } from "react-router-dom";
@@ -11,8 +11,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 export default function Register() {
   const [serverErrors, setServerErrors] = useState([]);
-  const { register, handleSubmit, formState: {errors} } = useForm({
-    resolver: yupResolver(Registerschema),mode: "onBlur"
+  const { register, handleSubmit, formState: { errors ,isSubmitting } } = useForm({
+    resolver: yupResolver(Registerschema), mode: "onBlur"
   });
 
   const registerForm = async (values) => {
@@ -21,7 +21,7 @@ export default function Register() {
         "https://knowledgeshop.runasp.net/api/Auth/Account/Register",
         values
       );
- 
+
     } catch (e) {
       setServerErrors(e.response.data.errors);
     }
@@ -93,7 +93,7 @@ export default function Register() {
           {...register("userName")}
           variant="outlined"
           sx={{ mb: 2 }}
-          error={errors.userName} helperText={ errors.userName?errors.userName.message:""}
+          error={errors.userName} helperText={errors.userName ? errors.userName.message : ""}
         />
         <TextField
           fullWidth
@@ -146,9 +146,10 @@ export default function Register() {
             fontSize: "16px",
             textTransform: "none",
             borderRadius: "8px",
-          }}
+          }} disabled={isSubmitting}
+
         >
-          Sign Up
+          {isSubmitting ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Sign Up"}
         </Button>
 
         <Typography sx={{ textAlign: "center", mt: 2, color: "#444" }}>

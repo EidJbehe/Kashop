@@ -2,10 +2,16 @@ import React from "react";
 import { Box, Button, Link, Typography, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import {Link as RouterLink} from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Registerschema } from "../../validations/RegisterSchema.js";
+
 
 export default function Register() {
-  const { register, handleSubmit } = useForm({});
+  const { register, handleSubmit, formState: {errors} } = useForm({
+    resolver: yupResolver(Registerschema),mode: "onBlur"
+  });
 
   const registerForm = async (values) => {
     try {
@@ -15,7 +21,8 @@ export default function Register() {
       );
       console.log(response);
     } catch (e) {
-console.log("SERVER ERROR:", e.response?.data);    }
+      console.log("SERVER ERROR:", e.response?.data);
+    }
   };
 
   return (
@@ -42,7 +49,6 @@ console.log("SERVER ERROR:", e.response?.data);    }
           boxShadow: 3,
         }}
       >
-       
         <Typography
           variant="h5"
           sx={{
@@ -59,40 +65,48 @@ console.log("SERVER ERROR:", e.response?.data);    }
         <TextField
           fullWidth
           label="User Name"
-          {...register("userName", { required: true })}
+          {...register("userName")}
           variant="outlined"
           sx={{ mb: 2 }}
+          error={errors.userName} helperText={ errors.userName?errors.userName.message:""}
         />
         <TextField
           fullWidth
           label="Full Name"
-          {...register("fullName", { required: true })}
+          {...register("fullName")}
           variant="outlined"
           sx={{ mb: 2 }}
+          error={errors.fullName} helperText={errors.fullName ? errors.fullName.message : ""}
         />
         <TextField
           fullWidth
           label="Email"
-          {...register("email", { required: true })}
+          {...register("email")}
           type="email"
           variant="outlined"
           sx={{ mb: 2 }}
+          error={errors.email} helperText={errors.email ? errors.email.message : ""}
+
         />
         <TextField
           fullWidth
           label="Password"
-          {...register("password", { required: true })}
+          {...register("password")}
           type="password"
           variant="outlined"
           sx={{ mb: 2 }}
+          error={errors.password} helperText={errors.password ? errors.password.message : ""}
+
         />
         <TextField
           fullWidth
           label="Phone Number"
-          {...register("phoneNumber", { required: true })}
+          {...register("phoneNumber")}
           type="tel"
           variant="outlined"
           sx={{ mb: 3 }}
+          error={errors.phoneNumber} helperText={errors.phoneNumber ? errors.phoneNumber.message : ""}
+
         />
 
         {/* Submit Button */}
@@ -112,22 +126,20 @@ console.log("SERVER ERROR:", e.response?.data);    }
           Sign Up
         </Button>
 
-        
         <Typography sx={{ textAlign: "center", mt: 2, color: "#444" }}>
-  Already have an account?{" "}
-  <Link
-    component={RouterLink}
-    to="/login"
-    underline="none"
-    sx={{
-      color: "#000",
-      fontWeight: "bold",
-    }}
-  >
-    Login
-  </Link>
-</Typography>
-
+          Already have an account?{" "}
+          <Link
+            component={RouterLink}
+            to="/login"
+            underline="none"
+            sx={{
+              color: "#000",
+              fontWeight: "bold",
+            }}
+          >
+            Login
+          </Link>
+        </Typography>
       </Box>
     </Box>
   );

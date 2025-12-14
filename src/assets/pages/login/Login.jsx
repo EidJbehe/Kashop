@@ -3,12 +3,17 @@ import { Box, Button, Link, Typography, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios"; 
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import {Link as RouterLink} from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { LoginSchema } from "../../validations/LoginShema.js";
 
 
 
 export default function Login() {
-  const { register, handleSubmit } = useForm({});
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(LoginSchema), mode: "onBlur"
+  });
 
   const loginForm = async (values) => {
     try {
@@ -67,6 +72,7 @@ export default function Login() {
           type="email"
           variant="outlined"
           sx={{ mb: 2 }}
+          error={errors.email} helperText={ errors.email?errors.email.message:""}
         />
         <TextField
           fullWidth
@@ -75,6 +81,7 @@ export default function Login() {
           type="password"
           variant="outlined"
           sx={{ mb: 2 }}
+          error={errors.password} helperText={ errors.password?errors.password.message:""}
         />
         <Box sx={{ textAlign: "right", mb: 3, display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 0.5 }}>
   <LockOpenIcon  sx={{ fontSize: 16, color: "#888" }} />

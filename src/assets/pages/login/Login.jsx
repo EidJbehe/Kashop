@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Link, Typography, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios"; 
@@ -7,10 +7,18 @@ import { Link as RouterLink } from "react-router-dom";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginSchema } from "../../validations/LoginShema.js";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+
 
 
 
 export default function Login() {
+  const [serverErrors, setServerErrors] = useState([]);
+  const clearServerErrors = () => {
+    if (serverErrors.length) {
+      setServerErrors([]);
+    }
+  };
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(LoginSchema), mode: "onBlur"
   });
@@ -21,9 +29,10 @@ export default function Login() {
         "https://knowledgeshop.runasp.net/api/Auth/Account/Login",
         values
       );
-      console.log(response);
     } catch (e) {
-       console.log("SERVER ERROR:", e.response?.data);
+      setServerErrors([
+        e.response?.data?.message || "Login failed, please try again",
+      ]);
     }
   };
 
@@ -63,6 +72,29 @@ export default function Login() {
         >
          Login
         </Typography>
+         {serverErrors.length > 0 && (
+          <Box
+            sx={{
+              mb: 2,
+              p: 2,
+              borderRadius: 2,
+              backgroundColor: "#fdecea",
+              border: "1px solid #f5c2c7",
+            }}
+          >
+            {serverErrors.map((error, index) => (
+              <Box
+                key={index}
+                sx={{ display: "flex", alignItems: "center", mb: 1 }}
+              >
+                <ErrorOutlineIcon sx={{ color: "#d32f2f", mr: 1 }} />
+                <Typography sx={{ color: "#d32f2f" }}>
+                  {error}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        )}
 
         {/* Form Inputs */}
         <TextField
@@ -72,6 +104,7 @@ export default function Login() {
           type="email"
           variant="outlined"
           sx={{ mb: 2 }}
+          onChange={clearServerErrors}
           error={errors.email} helperText={ errors.email?errors.email.message:""}
         />
         <TextField
@@ -81,6 +114,7 @@ export default function Login() {
           type="password"
           variant="outlined"
           sx={{ mb: 2 }}
+          onChange={clearServerErrors}
           error={errors.password} helperText={ errors.password?errors.password.message:""}
         />
         <Box sx={{ textAlign: "right", mb: 3, display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 0.5 }}>

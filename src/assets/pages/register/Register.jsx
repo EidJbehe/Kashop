@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Link, Typography, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -6,9 +6,11 @@ import { Link as RouterLink } from "react-router-dom";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Registerschema } from "../../validations/RegisterSchema.js";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 
 export default function Register() {
+  const [serverErrors, setServerErrors] = useState([]);
   const { register, handleSubmit, formState: {errors} } = useForm({
     resolver: yupResolver(Registerschema),mode: "onBlur"
   });
@@ -19,9 +21,9 @@ export default function Register() {
         "https://knowledgeshop.runasp.net/api/Auth/Account/Register",
         values
       );
-      console.log(response);
+ 
     } catch (e) {
-      console.log("SERVER ERROR:", e.response?.data);
+      setServerErrors(e.response.data.errors);
     }
   };
 
@@ -60,6 +62,29 @@ export default function Register() {
         >
           Sign Up
         </Typography>
+        {serverErrors.length > 0 && (
+          <Box
+            sx={{
+              mb: 2,
+              p: 2,
+              borderRadius: 2,
+              backgroundColor: "#fdecea",
+              border: "1px solid #f5c2c7",
+            }}
+          >
+            {serverErrors.map((error, index) => (
+              <Box
+                key={index}
+                sx={{ display: "flex", alignItems: "center", mb: 1 }}
+              >
+                <ErrorOutlineIcon sx={{ color: "#d32f2f", mr: 1 }} />
+                <Typography sx={{ color: "#d32f2f" }}>
+                  {error}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        )}
 
         {/* Form Inputs */}
         <TextField

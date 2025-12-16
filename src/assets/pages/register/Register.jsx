@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Registerschema } from "../../validations/RegisterSchema.js";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import axiosInstance from "../../../Api/axiosInstance.js";
 
 
 export default function Register() {
@@ -17,8 +18,8 @@ export default function Register() {
 
   const registerForm = async (values) => {
     try {
-      const response = await axios.post(
-        "https://knowledgeshop.runasp.net/api/Auth/Account/Register",
+      const response = await axiosInstance.post(
+        "/Auth/Account/Register",
         values
       );
 

@@ -54,7 +54,7 @@ export default function Navbar() {
   const [mobileAnchor, setMobileAnchor] = useState(null);
 
   const links = [
-  { name: "Home", path: "/" },
+  { name: "Home", path: "/home" },
   { name: "About", path: "/about" },
   { name: "Contact Us", path: "/contact" },
   { name: "Login", path: "/login" },

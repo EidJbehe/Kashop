@@ -1,23 +1,20 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Link,
-  Typography,
-  TextField,
-  CircularProgress,
-} from "@mui/material";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { Link as RouterLink } from "react-router-dom";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { LoginSchema } from "../../validations/LoginShema.js";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import SendCode from "../sendCode/SendCode.jsx";
+import React, { useContext, useState } from 'react';
+import { Box, Button, Link, Typography, TextField, CircularProgress } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { LoginSchema } from '../../validations/LoginShema.js';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import SendCode from '../sendCode/SendCode.jsx';
+import axiosInstance from '../../../Api/axiosInstance.js';
+import AuthContext from '../../context/AuthContext.jsx';
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { setToken, setAcsessToken } = useContext(AuthContext);
   const [serverErrors, setServerErrors] = useState([]);
   const clearServerErrors = () => {
     if (serverErrors.length) {
@@ -30,19 +27,18 @@ export default function Login() {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(LoginSchema),
-    mode: "onBlur",
+    mode: 'onBlur',
   });
 
   const loginForm = async (values) => {
     try {
-      const response = await axios.post(
-        "https://knowledgeshop.runasp.net/api/Auth/Account/Login",
-        values
-      );
+      const response = await axiosInstance.post('/Auth/Account/Login', values);
+      setToken('token', response.data.accessToken);
+      setAcsessToken(response.data.accessToken);
+
+      navigate('/home');
     } catch (e) {
-      setServerErrors([
-        e.response?.data?.message || "Login failed, please try again",
-      ]);
+      setServerErrors([e.response?.data?.message || 'Login failed, please try again']);
     }
   };
 
@@ -50,11 +46,11 @@ export default function Login() {
     <Box
       className="login-form"
       sx={{
-        minHeight: "100vh",
-        backgroundColor: "#F5F5F5",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        minHeight: '100vh',
+        backgroundColor: '#F5F5F5',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         px: 2,
       }}
     >
@@ -62,10 +58,10 @@ export default function Login() {
         component="form"
         onSubmit={handleSubmit(loginForm)}
         sx={{
-          width: "100%",
+          width: '100%',
           maxWidth: 420,
           p: 4,
-          backgroundColor: "#fff",
+          backgroundColor: '#fff',
           borderRadius: 3,
           boxShadow: 3,
         }}
@@ -73,10 +69,10 @@ export default function Login() {
         <Typography
           variant="h5"
           sx={{
-            fontWeight: "bold",
+            fontWeight: 'bold',
             mb: 3,
-            textAlign: "center",
-            color: "#000",
+            textAlign: 'center',
+            color: '#000',
           }}
         >
           Login
@@ -87,17 +83,14 @@ export default function Login() {
               mb: 2,
               p: 2,
               borderRadius: 2,
-              backgroundColor: "#fdecea",
-              border: "1px solid #f5c2c7",
+              backgroundColor: '#fdecea',
+              border: '1px solid #f5c2c7',
             }}
           >
             {serverErrors.map((error, index) => (
-              <Box
-                key={index}
-                sx={{ display: "flex", alignItems: "center", mb: 1 }}
-              >
-                <ErrorOutlineIcon sx={{ color: "#d32f2f", mr: 1 }} />
-                <Typography sx={{ color: "#d32f2f" }}>{error}</Typography>
+              <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <ErrorOutlineIcon sx={{ color: '#d32f2f', mr: 1 }} />
+                <Typography sx={{ color: '#d32f2f' }}>{error}</Typography>
               </Box>
             ))}
           </Box>
@@ -107,45 +100,45 @@ export default function Login() {
         <TextField
           fullWidth
           label="Email"
-          {...register("email", { required: true })}
+          {...register('email', { required: true })}
           type="email"
           variant="outlined"
           sx={{ mb: 2 }}
           onChange={clearServerErrors}
           error={errors.email}
-          helperText={errors.email ? errors.email.message : ""}
+          helperText={errors.email ? errors.email.message : ''}
         />
         <TextField
           fullWidth
           label="Password"
-          {...register("password", { required: true })}
+          {...register('password', { required: true })}
           type="password"
           variant="outlined"
           sx={{ mb: 2 }}
           onChange={clearServerErrors}
           error={errors.password}
-          helperText={errors.password ? errors.password.message : ""}
+          helperText={errors.password ? errors.password.message : ''}
         />
         <Box
           sx={{
-            textAlign: "right",
+            textAlign: 'right',
             mb: 3,
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
             gap: 0.5,
           }}
         >
-          <LockOpenIcon sx={{ fontSize: 16, color: "#888" }} />
+          <LockOpenIcon sx={{ fontSize: 16, color: '#888' }} />
           <Link
             component={RouterLink}
             to="/SendCode"
             sx={{
-              fontSize: "14px",
-              textDecoration: "none",
-              color: "#888",
-              "&:hover": { color: "#000", textDecoration: "underline" },
-              fontWeight: "bold",
+              fontSize: '14px',
+              textDecoration: 'none',
+              color: '#888',
+              '&:hover': { color: '#000', textDecoration: 'underline' },
+              fontWeight: 'bold',
             }}
           >
             Forget Password?
@@ -158,30 +151,26 @@ export default function Login() {
           variant="contained"
           sx={{
             py: 1.6,
-            backgroundColor: "#000",
-            "&:hover": { backgroundColor: "#333" },
-            fontSize: "16px",
-            textTransform: "none",
-            borderRadius: "8px",
+            backgroundColor: '#000',
+            '&:hover': { backgroundColor: '#333' },
+            fontSize: '16px',
+            textTransform: 'none',
+            borderRadius: '8px',
           }}
           disabled={isSubmitting}
         >
-          {isSubmitting ? (
-            <CircularProgress size={24} sx={{ color: "white" }} />
-          ) : (
-            "Login"
-          )}
+          {isSubmitting ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Login'}
         </Button>
 
-        <Typography sx={{ textAlign: "center", mt: 2, color: "#444" }}>
-          Don't have an account?{" "}
+        <Typography sx={{ textAlign: 'center', mt: 2, color: '#444' }}>
+          Don't have an account?{' '}
           <Link
             component={RouterLink}
             to="/register"
             style={{
-              textDecoration: "none",
-              color: "#000",
-              fontWeight: "bold",
+              textDecoration: 'none',
+              color: '#000',
+              fontWeight: 'bold',
             }}
           >
             Sign Up

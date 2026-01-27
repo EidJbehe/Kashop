@@ -7,10 +7,9 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Registerschema } from '../../validations/RegisterSchema.js';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import axiosInstance from '../../../Api/axiosInstance.js';
+import useRegister from '../../../hooks/useRegister.js';
 
 export default function Register() {
-  const [serverErrors, setServerErrors] = useState([]);
   const {
     register,
     handleSubmit,
@@ -20,12 +19,10 @@ export default function Register() {
     mode: 'onBlur',
   });
 
+  const { serverErrors, registerMutation }=useRegister();  
   const registerForm = async (values) => {
-    try {
-      const response = await axiosInstance.post('/Auth/Account/Register', values);
-    } catch (e) {
-      setServerErrors(e.response.data.errors);
-    }
+   await registerMutation.mutate(values);
+   
   };
 
   return (

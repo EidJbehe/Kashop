@@ -191,22 +191,25 @@ export default function Navbar() {
         <MenuItem component={Link} to="/home" onClick={handleMobileClose}>
           <Typography textAlign="center">Home</Typography>
         </MenuItem>
+
         <MenuItem component={Link} to="/about" onClick={handleMobileClose}>
           <Typography textAlign="center">About</Typography>
         </MenuItem>
+
         <MenuItem component={Link} to="/contact" onClick={handleMobileClose}>
           <Typography textAlign="center">Contact Us</Typography>
         </MenuItem>
 
         {!token && (
-          <>
-            <MenuItem component={Link} to="/login" onClick={handleMobileClose}>
-              <Typography textAlign="center">Login</Typography>
-            </MenuItem>
-            <MenuItem component={Link} to="/register" onClick={handleMobileClose}>
-              <Typography textAlign="center">Sign Up</Typography>
-            </MenuItem>
-          </>
+          <MenuItem component={Link} to="/login" onClick={handleMobileClose}>
+            <Typography textAlign="center">Login</Typography>
+          </MenuItem>
+        )}
+
+        {!token && (
+          <MenuItem component={Link} to="/register" onClick={handleMobileClose}>
+            <Typography textAlign="center">Sign Up</Typography>
+          </MenuItem>
         )}
       </Menu>
     </Box>

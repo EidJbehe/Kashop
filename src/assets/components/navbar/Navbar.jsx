@@ -82,7 +82,8 @@ export default function Navbar() {
   const [mobileAnchor, setMobileAnchor] = useState(null);
   const isMobileOpen = Boolean(mobileAnchor);
 const token = useAuthStore((state) => state.token);
-const logout = useAuthStore((state) => state.logout);
+  const logout = useAuthStore((state) => state.logout);
+  const user=useAuthStore((state)=>state.user);
 
 
   const handleMobileOpen = (event) => setMobileAnchor(event.currentTarget);
@@ -111,21 +112,35 @@ const logout = useAuthStore((state) => state.logout);
             <NavLink to="/about">About</NavLink>
             <NavLink to="/contact">Contact Us</NavLink>
 
-            {token ? (
+            {token && user ? (
               <>
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: '15px',
+                    color: '#444',
+                    mr: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  👋 Welcome,&nbsp;
+                  <Box component="span" sx={{ color: '#FF5722' }}>
+                    {user.name}
+                  </Box>
+                </Typography>
+             
                 {/* Icons */}
                 <IconButton component={Link} to="/favorites" size="large" aria-label="Favorites">
                   <Badge badgeContent={2} color="error">
                     <FavoriteIcon sx={{ color: '#000' }} />
                   </Badge>
                 </IconButton>
-
                 <IconButton component={Link} to="/cart" size="large" aria-label="Cart">
                   <Badge badgeContent={3} color="error">
                     <ShoppingCartIcon sx={{ color: '#000' }} />
                   </Badge>
                 </IconButton>
-
                 <IconButton
                   size="large"
                   aria-label="Logout"

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -16,7 +16,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NavLogo from './navbarImages/Logo-navbar.svg';
 import { Link } from 'react-router-dom';
-import AuthContext from '../../context/AuthContext';
+import useAuthStore from '../../store/AuthStore';
 
 // ======= Search Styles =======
 const Search = styled('div')(({ theme }) => ({
@@ -81,7 +81,9 @@ const NavLink = styled(Link)(({ theme }) => ({
 export default function Navbar() {
   const [mobileAnchor, setMobileAnchor] = useState(null);
   const isMobileOpen = Boolean(mobileAnchor);
-  const { token, logout } = useContext(AuthContext);
+const token = useAuthStore((state) => state.token);
+const logout = useAuthStore((state) => state.logout);
+
 
   const handleMobileOpen = (event) => setMobileAnchor(event.currentTarget);
   const handleMobileClose = () => setMobileAnchor(null);

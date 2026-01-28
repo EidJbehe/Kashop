@@ -1,13 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../Api/axiosInstance';
-import AuthContext from '../assets/context/AuthContext';
+import useAuthStore from '../assets/store/AuthStore';
+
 
 export default function useLogin() {
   const [serverErrors, setServerErrors] = useState([]);
   const navigate = useNavigate();
-  const { setAccessToken } = useContext(AuthContext);
+  const setToken = useAuthStore((state) => state.setToken);
+  
 
   const loginMutation = useMutation({
     mutationFn: (values) => axiosInstance.post('/Auth/Account/Login', values),
@@ -16,7 +18,7 @@ export default function useLogin() {
     },
     onSuccess: (response) => {
       if (response.data && response.data.success) {
-        setAccessToken(response.data.accessToken);
+       setToken(response.data.accessToken);
         navigate('/home');
       } else {
         setServerErrors([response.data?.message || 'Login failed, please try again']);

@@ -9,13 +9,15 @@ export default function useRegister() {
  const navigate = useNavigate();
 const registerMutation = useMutation({
     mutationFn:async (values) => { 
-      return await axiosInstance.post('/Auth/Account/Register', values);
+        return await axiosInstance.post('/Auth/Account/Register', values);
+        
     },
     onSuccess: () => {
       navigate('/login');
     },
     onError: (error) => { 
-         setServerErrors(error.response.data.errors);
+        setServerErrors(error.response.data.errors);
+        console.log(error.response.data);
     }
 
 })

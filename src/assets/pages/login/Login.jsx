@@ -1,45 +1,27 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import { Box, Button, Link, Typography, TextField, CircularProgress } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import { Link as RouterLink } from 'react-router-dom';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { LoginSchema } from '../../validations/LoginShema.js';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import SendCode from '../sendCode/SendCode.jsx';
-import axiosInstance from '../../../Api/axiosInstance.js';
-import AuthContext from '../../context/AuthContext.jsx';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { LoginSchema } from '../../validations/LoginSchema.js';
+import useLogin from '../../../hooks/useLogin.js';
 
 export default function Login() {
-  const navigate = useNavigate();
-  const { setToken, setAcsessToken } = useContext(AuthContext);
-  const [serverErrors, setServerErrors] = useState([]);
-  const clearServerErrors = () => {
-    if (serverErrors.length) {
-      setServerErrors([]);
-    }
-  };
+  const { serverErrors, loginMutation } = useLogin();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(LoginSchema),
     mode: 'onBlur',
   });
 
   const loginForm = async (values) => {
-    try {
-      const response = await axiosInstance.post('/Auth/Account/Login', values);
-      setToken('token', response.data.accessToken);
-      setAcsessToken(response.data.accessToken);
-
-      navigate('/home');
-    } catch (e) {
-      setServerErrors([e.response?.data?.message || 'Login failed, please try again']);
-    }
+    await loginMutation.mutateAsync(values);
   };
 
   return (
@@ -68,15 +50,11 @@ export default function Login() {
       >
         <Typography
           variant="h5"
-          sx={{
-            fontWeight: 'bold',
-            mb: 3,
-            textAlign: 'center',
-            color: '#000',
-          }}
+          sx={{ fontWeight: 'bold', mb: 3, textAlign: 'center', color: '#000' }}
         >
           Login
         </Typography>
+
         {serverErrors.length > 0 && (
           <Box
             sx={{
@@ -96,29 +74,28 @@ export default function Login() {
           </Box>
         )}
 
-        {/* Form Inputs */}
         <TextField
           fullWidth
           label="Email"
-          {...register('email', { required: true })}
+          {...register('email')}
           type="email"
           variant="outlined"
           sx={{ mb: 2 }}
-          onChange={clearServerErrors}
-          error={errors.email}
-          helperText={errors.email ? errors.email.message : ''}
+          error={!!errors.email}
+          helperText={errors.email?.message || ''}
         />
+
         <TextField
           fullWidth
           label="Password"
-          {...register('password', { required: true })}
+          {...register('password')}
           type="password"
           variant="outlined"
           sx={{ mb: 2 }}
-          onChange={clearServerErrors}
-          error={errors.password}
-          helperText={errors.password ? errors.password.message : ''}
+          error={!!errors.password}
+          helperText={errors.password?.message || ''}
         />
+
         <Box
           sx={{
             textAlign: 'right',
@@ -157,9 +134,13 @@ export default function Login() {
             textTransform: 'none',
             borderRadius: '8px',
           }}
-          disabled={isSubmitting}
+          disabled={loginMutation.isLoading}
         >
-          {isSubmitting ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Login'}
+          {loginMutation.isLoading ? (
+            <CircularProgress size={24} sx={{ color: 'white' }} />
+          ) : (
+            'Login'
+          )}
         </Button>
 
         <Typography sx={{ textAlign: 'center', mt: 2, color: '#444' }}>
@@ -167,11 +148,7 @@ export default function Login() {
           <Link
             component={RouterLink}
             to="/register"
-            style={{
-              textDecoration: 'none',
-              color: '#000',
-              fontWeight: 'bold',
-            }}
+            style={{ textDecoration: 'none', color: '#000', fontWeight: 'bold' }}
           >
             Sign Up
           </Link>

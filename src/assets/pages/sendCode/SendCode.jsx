@@ -12,6 +12,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import useSendCode from "../../../hooks/useSendCode.js";
 
 const SendCodeSchema = yup.object().shape({
   email: yup
@@ -21,8 +22,7 @@ const SendCodeSchema = yup.object().shape({
 });
 
 export default function SendCode() {
-  const [serverErrors, setServerErrors] = useState([]);
-  const navigate = useNavigate();
+ 
   const {
     register,
     handleSubmit,
@@ -31,20 +31,12 @@ export default function SendCode() {
     resolver: yupResolver(SendCodeSchema),
     mode: "onBlur",
   });
+  const { serverErrors,sendCodeMutation}=useSendCode();
 
   const sendCodeForm = async (data) => {
-    setServerErrors([]);
-    try {
-      await axios.post(
-        "https://knowledgeshop.runasp.net/api/Auth/Account/SendCode",
-        { email: data.email }
-      );
-      navigate("/resetPassword", { state: { email: data.email } });
-    } catch (error) {
-      setServerErrors([
-        error.response?.data?.message || "Something went wrong",
-      ]);
-    }
+    await sendCodeMutation.mutate(data);
+   
+    
   };
 
   return (

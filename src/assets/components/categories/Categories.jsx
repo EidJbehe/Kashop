@@ -25,69 +25,65 @@ export default function Categories() {
         py: 6,
       }}
     >
-      <Container sx={{ textAlign: 'center' }}>
-        <Typography
-          sx={{
-            fontSize: '28px',
-            fontWeight: 700,
-            color: '#000',
-            letterSpacing: '-0.3px',
-            mb: 3,
-          }}
-        >
-          Categories
-        </Typography>
+      <Typography
+        sx={{
+          fontSize: '28px',
+          fontWeight: 700,
+          color: '#000',
+          letterSpacing: '-0.3px',
+          mb: 3,
+        }}
+      >
+        Categories
+      </Typography>
 
-        <Grid container spacing={3}>
-          {data.map((category) => (
-            <Grid item size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={category.id}>
-              <Card
-                elevation={0}
-                onClick={() => {
-                  console.log('Clicked category:', category.id);
-                  console.log('Category name:', category.name);
-                }}
+      <Grid container spacing={3}>
+        {data.map((category) => (
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={category.id}>
+            <Card
+              elevation={0}
+              onClick={() => {
+              }}
+              sx={{
+                backgroundColor: '#fff',
+                borderRadius: 3,
+                border: '1px solid #eee',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+
+                '&:hover': {
+                  borderColor: '#ccc',
+                  transform: 'translateY(-2px)',
+                },
+
+                '&:active': {
+                  transform: 'translateY(0)',
+                  backgroundColor: '#fafafa',
+                },
+              }}
+            >
+              <CardContent
                 sx={{
-                  backgroundColor: '#fff',
-                  borderRadius: 3,
-                  border: '1px solid #eee',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-
-                  '&:hover': {
-                    borderColor: '#ccc',
-                    transform: 'translateY(-2px)',
-                  },
-
-                  '&:active': {
-                    transform: 'translateY(0)',
-                    backgroundColor: '#fafafa',
-                  },
+                  py: 3,
+                  px: 2.5,
+                  textAlign: 'center',
                 }}
               >
-                <CardContent
+                <Typography
                   sx={{
-                    py: 3,
-                    px: 2.5,
-                    textAlign: 'center',
+                    fontSize: '17px',
+                    fontWeight: 600,
+                    color: '#000',
+                    letterSpacing: '0.2px',
                   }}
                 >
-                  <Typography
-                    sx={{
-                      fontSize: '17px',
-                      fontWeight: 600,
-                      color: '#000',
-                      letterSpacing: '0.2px',
-                    }}
-                  >
-                    {category.id}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
+                  {category.name}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }

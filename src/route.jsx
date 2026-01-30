@@ -10,6 +10,7 @@ import Contact from './assets/pages/contact/Contact.jsx';
 import SendCode from "./assets/pages/sendCode/SendCode.jsx";
 import ResetPassword from "./assets/pages/resetPassword/ResetPassword.jsx";
 import ProtectedRouter from "./ProtectedRouter.jsx";
+import ProudctDetails from "./assets/pages/proudcts/ProductDetails.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
                      <Cart />
                 </ProtectedRouter>
                
+        },
+        {
+            path: "Products/:id",
+            element:<ProudctDetails/>
         },
         {
             path:"login",

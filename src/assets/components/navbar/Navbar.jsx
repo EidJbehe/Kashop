@@ -14,41 +14,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { Button, InputAdornment, TextField } from '@mui/material';
 import NavLogo from './navbarImages/Logo-navbar.svg';
 import { Link } from 'react-router-dom';
 import useAuthStore from '../../store/AuthStore';
-
-// ======= Search Styles =======
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: '#F2F2F2',
-  '&:hover': { backgroundColor: '#E8E8E8' },
-  marginRight: theme.spacing(2),
-  width: '100%',
-  maxWidth: 300,
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: '#8C8C8C',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: '#333333',
-  width: '100%',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-  },
-}));
+import { useTranslation } from 'react-i18next';
 
 // ======= Styled NavLink =======
 const NavLink = styled(Link)(({ theme }) => ({
@@ -81,13 +51,17 @@ const NavLink = styled(Link)(({ theme }) => ({
 export default function Navbar() {
   const [mobileAnchor, setMobileAnchor] = useState(null);
   const isMobileOpen = Boolean(mobileAnchor);
-const token = useAuthStore((state) => state.token);
+  const token = useAuthStore((state) => state.token);
   const logout = useAuthStore((state) => state.logout);
-  const user=useAuthStore((state)=>state.user);
-
-
+  const user = useAuthStore((state) => state.user);
   const handleMobileOpen = (event) => setMobileAnchor(event.currentTarget);
   const handleMobileClose = () => setMobileAnchor(null);
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = (lng) => {
+    lng = i18n.language === 'en' ? 'ar' : 'en';
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -97,20 +71,44 @@ const token = useAuthStore((state) => state.token);
           <Box component="img" sx={{ height: 40, flexShrink: 0, mr: 2 }} src={NavLogo} alt="Logo" />
 
           {/* Desktop Search */}
-          <Search sx={{ display: { xs: 'none', sm: 'flex' } }}>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
-          </Search>
+          <TextField
+            size="small"
+            placeholder={t('Search')}
+            sx={{
+              mx: 2,
+
+              width: 300,
+              backgroundColor: '#f2f2f2',
+              borderRadius: 2,
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                '& fieldset': {
+                  borderColor: '#e0e0e0',
+                },
+                '&:hover fieldset': {
+                  borderColor: '#d6d6d6',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#bdbdbd',
+                },
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: '#8c8c8c' }} />
+                </InputAdornment>
+              ),
+            }}
+          />
 
           <Box sx={{ flexGrow: 1 }} />
 
           {/* Desktop Links */}
           <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 3 }}>
-            <NavLink to="/home">Home</NavLink>
-            <NavLink to="/about">About</NavLink>
-            <NavLink to="/contact">Contact Us</NavLink>
+            <NavLink to="/home">{t('Home')}</NavLink>
+            <NavLink to="/about">{t('About')}</NavLink>
+            <NavLink to="/contact">{t('Contact')}</NavLink>
 
             {token && user ? (
               <>
@@ -124,18 +122,13 @@ const token = useAuthStore((state) => state.token);
                     alignItems: 'center',
                   }}
                 >
-                  👋 Welcome,&nbsp;
+                  👋 {t('Welcome')},&nbsp;
                   <Box component="span" sx={{ color: '#FF5722' }}>
                     {user.name}
                   </Box>
                 </Typography>
-             
+
                 {/* Icons */}
-                <IconButton component={Link} to="/favorites" size="large" aria-label="Favorites">
-                  <Badge badgeContent={2} color="error">
-                    <FavoriteIcon sx={{ color: '#000' }} />
-                  </Badge>
-                </IconButton>
                 <IconButton component={Link} to="/cart" size="large" aria-label="Cart">
                   <Badge badgeContent={3} color="error">
                     <ShoppingCartIcon sx={{ color: '#000' }} />
@@ -149,11 +142,49 @@ const token = useAuthStore((state) => state.token);
                 >
                   <LogoutIcon />
                 </IconButton>
+                <Button
+                  onClick={toggleLanguage}
+                  sx={{
+                    width: 38,
+                    height: 38,
+                    minWidth: 38,
+                    borderRadius: '50%',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    color: '#444',
+                    backgroundColor: '#f5f5f5',
+                    border: '1px solid #e5e5e5',
+                    '&:hover': {
+                      backgroundColor: '#ededed',
+                    },
+                  }}
+                >
+                  {i18n.language === 'en' ? 'AR' : 'EN'}
+                </Button>
               </>
             ) : (
               <>
-                <NavLink to="/login">Login</NavLink>
-                <NavLink to="/register">Sign Up</NavLink>
+                <NavLink to="/login">{t('Login')}</NavLink>
+                <NavLink to="/register">{t('Register')}</NavLink>
+                <Button
+                  onClick={toggleLanguage}
+                  sx={{
+                    width: 38,
+                    height: 38,
+                    minWidth: 38,
+                    borderRadius: '50%',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    color: '#444',
+                    backgroundColor: '#f5f5f5',
+                    border: '1px solid #e5e5e5',
+                    '&:hover': {
+                      backgroundColor: '#ededed',
+                    },
+                  }}
+                >
+                  {i18n.language === 'en' ? 'AR' : 'EN'}
+                </Button>
               </>
             )}
           </Box>
@@ -162,12 +193,6 @@ const token = useAuthStore((state) => state.token);
           <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1 }}>
             {token && (
               <>
-                <IconButton component={Link} to="/favorites" size="large" aria-label="Favorites">
-                  <Badge badgeContent={2} color="error">
-                    <FavoriteIcon sx={{ color: '#000' }} />
-                  </Badge>
-                </IconButton>
-
                 <IconButton component={Link} to="/cart" size="large" aria-label="Cart">
                   <Badge badgeContent={3} color="error">
                     <ShoppingCartIcon sx={{ color: '#000' }} />
@@ -206,26 +231,26 @@ const token = useAuthStore((state) => state.token);
         onClose={handleMobileClose}
       >
         <MenuItem component={Link} to="/home" onClick={handleMobileClose}>
-          <Typography textAlign="center">Home</Typography>
+          <Typography textAlign="center">{t('Home')}</Typography>
         </MenuItem>
 
         <MenuItem component={Link} to="/about" onClick={handleMobileClose}>
-          <Typography textAlign="center">About</Typography>
+          <Typography textAlign="center">{t('About')}</Typography>
         </MenuItem>
 
         <MenuItem component={Link} to="/contact" onClick={handleMobileClose}>
-          <Typography textAlign="center">Contact Us</Typography>
+          <Typography textAlign="center">{t('Contact')}</Typography>
         </MenuItem>
 
         {!token && (
           <MenuItem component={Link} to="/login" onClick={handleMobileClose}>
-            <Typography textAlign="center">Login</Typography>
+            <Typography textAlign="center">{t('Login')}</Typography>
           </MenuItem>
         )}
 
         {!token && (
           <MenuItem component={Link} to="/register" onClick={handleMobileClose}>
-            <Typography textAlign="center">Sign Up</Typography>
+            <Typography textAlign="center">{t('Register')}</Typography>
           </MenuItem>
         )}
       </Menu>

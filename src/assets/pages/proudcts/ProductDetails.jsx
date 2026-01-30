@@ -14,8 +14,11 @@ import {
 } from '@mui/material';
 import { display } from '@mui/system';
 import useAddToCart from '../../../hooks/useAddToCart';
+import { useTranslation } from 'react-i18next';
 
 export default function ProductDetails() {
+    const { t, i18n } = useTranslation();
+  
   const { id } = useParams();
   const { isLoading, isError, data } = useProductDetails(id);
   const {mutate:addToCart,isPending }=useAddToCart();
@@ -34,17 +37,16 @@ export default function ProductDetails() {
   }
 
   if (isError || !data) {
-    return <Box sx={{ color: 'red' }}>Error loading product.</Box>;
+    return <Box sx={{ color: 'red' }}>{t('error_loading_product')}</Box>;
   }
 
-  const product = data;
+  const product = data.response;
 
   return (
     <Box sx={{ p: 3 }}>
       <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
-        {/* Grid: Image + Details */}
         <Grid container spacing={2} alignItems="flex-start">
-          {/* Image Left */}
+          {/* Image */}
           <Grid size={{ xs: 12, md: 5 }}>
             <Box
               sx={{
@@ -70,7 +72,7 @@ export default function ProductDetails() {
             </Box>
           </Grid>
 
-          {/* Details Right */}
+          {/* Details */}
           <Grid size={{ xs: 12, md: 7 }}>
             <CardContent>
               <Typography variant="h5" fontWeight="bold" gutterBottom>
@@ -82,7 +84,7 @@ export default function ProductDetails() {
               </Typography>
               <Box sx={{ mb: 1 }}>
                 <Typography variant="body2" color="text.secondary">
-                  Quantity: {product.quantity}
+                  {t('Quantity')}: {product.quantity}
                 </Typography>
               </Box>
 
@@ -95,16 +97,24 @@ export default function ProductDetails() {
 
               {/* Add to Cart Button */}
               <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
-                <Button variant="contained" color="primary" disabled={isPending} onClick={() => addToCart({ productId: product.id, count: 1 })}>
-              
-                  {isPending ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Add to Cart'}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={isPending}
+                  onClick={() => addToCart({ productId: product.id, count: 1 })}
+                >
+                  {isPending ? (
+                    <CircularProgress size={24} sx={{ color: 'white' }} />
+                  ) : (
+                    t('add_to_cart')
+                  )}
                 </Button>
               </Box>
             </CardContent>
           </Grid>
         </Grid>
 
-        {/* Description Under Grid */}
+        {/* Description */}
         <CardContent>
           {product.description ? (
             <Box
@@ -125,7 +135,7 @@ export default function ProductDetails() {
             </Box>
           ) : (
             <Typography color="text.secondary" fontStyle="italic">
-              No description available.
+              {t('no_description.')}
             </Typography>
           )}
         </CardContent>

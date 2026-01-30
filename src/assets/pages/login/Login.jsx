@@ -7,8 +7,11 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginSchema } from '../../validations/LoginSchema.js';
 import useLogin from '../../../hooks/useLogin.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Login() {
+    const { t, i18n } = useTranslation();
+  
   const { serverErrors, loginMutation } = useLogin();
 
   const {
@@ -52,7 +55,7 @@ export default function Login() {
           variant="h5"
           sx={{ fontWeight: 'bold', mb: 3, textAlign: 'center', color: '#000' }}
         >
-          Login
+          {t('Login')}
         </Typography>
 
         {serverErrors.length > 0 && (
@@ -118,7 +121,7 @@ export default function Login() {
               fontWeight: 'bold',
             }}
           >
-            Forget Password?
+            {t('forget_password')}
           </Link>
         </Box>
 
@@ -139,18 +142,18 @@ export default function Login() {
           {loginMutation.isLoading ? (
             <CircularProgress size={24} sx={{ color: 'white' }} />
           ) : (
-            'Login'
+              t('Login')
           )}
         </Button>
 
         <Typography sx={{ textAlign: 'center', mt: 2, color: '#444' }}>
-          Don't have an account?{' '}
+          {t('dont_have_account')}{' '}
           <Link
             component={RouterLink}
             to="/register"
             style={{ textDecoration: 'none', color: '#000', fontWeight: 'bold' }}
           >
-            Sign Up
+            {t('Sign_up')}
           </Link>
         </Typography>
       </Box>

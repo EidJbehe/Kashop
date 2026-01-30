@@ -14,9 +14,12 @@ import axios from "axios";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import useResetPassword from "../../../hooks/useResetPassword";
 import { ResetPasswordSchema } from '../../validations/ResetPasswordSchema';
+import { useTranslation } from "react-i18next";
 
 
 export default function ResetPassword() {
+    const { t, i18n } = useTranslation();
+  
   const navigate = useNavigate();
   const location = useLocation();
   const emailFromState = location.state?.email || "";
@@ -73,7 +76,7 @@ export default function ResetPassword() {
             letterSpacing: 1,
           }}
         >
-          Reset Password
+          {t('reset_password')}
         </Typography>
 
         {/* Server Errors */}
@@ -145,7 +148,7 @@ export default function ResetPassword() {
             textTransform: 'none',
           }}
         >
-          {resetPasswordMutation.isLoading  ? (
+          {resetPasswordMutation.isLoading ? (
             <CircularProgress size={24} sx={{ color: '#fff' }} />
           ) : (
             'Update Password'

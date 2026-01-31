@@ -11,6 +11,7 @@ import SendCode from "./assets/pages/sendCode/SendCode.jsx";
 import ResetPassword from "./assets/pages/resetPassword/ResetPassword.jsx";
 import ProtectedRouter from "./ProtectedRouter.jsx";
 import ProudctDetails from "./assets/pages/proudcts/ProductDetails.jsx";
+import Chekout from "./assets/pages/chekout/Chekout.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
                      <Cart />
                 </ProtectedRouter>
                
+        },
+        {
+            path: "checkout",
+            element:<Chekout/>
         },
         {
             path: "Products/:id",

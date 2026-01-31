@@ -1,42 +1,49 @@
-import React from 'react';
-import useCart from './../../../hooks/useCart';
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-  Button,
-  Typography,
-  CircularProgress,
-  Box,
-} from '@mui/material';
-import useRemoveFromCare from '../../../hooks/useRemoveFromCart';
-import useUpdateCount from '../../../hooks/useUpdateCartItem';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import React, { useState } from 'react';
+import useCart from '../../../hooks/useCart';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-export default function Cart() {
-    const { t, i18n } = useTranslation();
-  
-  const { data, isLoading, isError, refetch } = useCart();
-  const navigate=useNavigate();
-  const { mutate: deleteFromCart, isPending } = useRemoveFromCare();
-  const { mutate: updateCount, isPending: isPendingUpdate } = useUpdateCount();
-  const handleUpdateCount = (productId, action) => {
-    const currentItem = data.items.find((item) => item.productId === productId);
-    if (action == '+') {
-      updateCount({ productId, count: currentItem.count + 1 });
-    } else if (action == '-') {
-      if (currentItem.count > 1) {
-        updateCount({ productId, count: currentItem.count - 1 });
-      }
-    }
-  };
+import {
+  Box,
+  Button,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
+import useChekout from '../../../hooks/useChekout';
 
+
+export default function Chekout() {
+  const { t, i18n } = useTranslation();
+    const { data, isLoading, isError, refetch } = useCart();
+    const [paymentMethod, setPaymentMethod] = useState('Cash');
+    const { mutate: ChekoutMutation, isPending: isPendingChekout } = useChekout();
+    const handlePaymentMethod = (event) => {
+        console.log(event.target.value);
+      setPaymentMethod(event.target.value);
+    };
+  const handleChekout = () => {
+      ChekoutMutation(paymentMethod, {
+          onSuccess: (response) => {
+              console.log('Response data:', response);
+          const url = response.data?.url; 
+          console.log('Checkout successful:', url);
+          if (url) {
+            window.location.href = url;  
+          } else {
+            alert(response.data?.message || 'Checkout failed');
+          }
+        },
+      });
+  };
   if (isLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
@@ -88,7 +95,7 @@ export default function Cart() {
         <Table>
           <TableHead sx={{ bgcolor: '#e0f7fa' }}>
             <TableRow>
-              {[t('Name'), t('Price'), t('Quantity'), t('Total'), t('Actions')].map((header) => (
+              {[t('Name'), t('Price'), t('Quantity'), t('Total')].map((header) => (
                 <TableCell
                   key={header}
                   sx={{
@@ -109,7 +116,11 @@ export default function Cart() {
               <TableRow
                 key={item.productId}
                 sx={{
-                  '&:hover': { bgcolor: '#f1f8e9', transform: 'scale(1.01)', transition: '0.2s' },
+                  '&:hover': {
+                    bgcolor: '#f1f8e9',
+                    transform: 'scale(1.01)',
+                    transition: '0.2s',
+                  },
                 }}
               >
                 <TableCell sx={{ textAlign: 'center', fontWeight: 500 }}>
@@ -119,38 +130,9 @@ export default function Cart() {
                   ${item.price.toFixed(2)}
                 </TableCell>
 
-                <TableCell sx={{ textAlign: 'center', fontWeight: 500 }}>
-                  <Button size="small" onClick={() => handleUpdateCount(item.productId, '-')}>
-                    <RemoveIcon fontSize="small" />
-                  </Button>
-
-                  {item.count}
-                  <Button size="small" onClick={() => handleUpdateCount(item.productId, '+')}>
-                    <AddIcon fontSize="small" />
-                  </Button>
-                </TableCell>
+                <TableCell sx={{ textAlign: 'center', fontWeight: 500 }}>{item.count}</TableCell>
                 <TableCell sx={{ textAlign: 'center', fontWeight: 500 }}>
                   ${item.totalPrice.toFixed(2)}
-                </TableCell>
-                <TableCell sx={{ textAlign: 'center' }}>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    size="small"
-                    sx={{
-                      textTransform: 'none',
-                      fontWeight: 'bold',
-                      ':hover': { bgcolor: '#c62828', transform: 'scale(1.05)' },
-                    }}
-                    onClick={() => deleteFromCart(item.productId)}
-                    disabled={isPending}
-                  >
-                    {isPending ? (
-                      <CircularProgress size={24} sx={{ color: 'white' }} />
-                    ) : (
-                      t('Remove')
-                    )}
-                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -179,15 +161,23 @@ export default function Cart() {
             )}
           </TableBody>
         </Table>
+        <FormControl fullWidth sx={{ m: 4, maxWidth: 300 }}>
+          <InputLabel>Payment Method</InputLabel>
+          <Select onChange={handlePaymentMethod} value={paymentMethod} label="Payment Method">
+            <MenuItem value="Cash">Cash</MenuItem>
+            <MenuItem value="Visa">Visa</MenuItem>
+          </Select>
+        </FormControl>
+        <Button
+          onClick={handleChekout}
+            disabled={isPendingChekout}
+          sx={{ m: 4 }}
+          variant="contained"
+          color="primary"
+        >
+          {isPendingChekout ? 'Redirecting...' : t('pay_now')}
+        </Button>
       </TableContainer>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, p: 2 }}>
-        <Button variant="contained" color="primary" onClick={() => navigate('/checkout')}>
-          {t('proceed_to_checkout')}
-        </Button>
-        <Button variant="outlined" color="secondary" onClick={() => navigate('/home')}>
-          {t('continue_shopping')}
-        </Button>
-      </Box>
     </Box>
   );
 }

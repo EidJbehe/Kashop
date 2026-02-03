@@ -5,5 +5,5 @@ import i18n from "../i18n";
 
 export function useProducts() { 
 
-  return useFetch(['product',i18n.language], '/Products');
+  return useFetch(['product', i18n.language], '/Products?limit=1000');
 }

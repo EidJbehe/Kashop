@@ -20,29 +20,25 @@ import {
 } from '@mui/material';
 import useChekout from '../../../hooks/useChekout';
 
-
 export default function Chekout() {
   const { t, i18n } = useTranslation();
-    const { data, isLoading, isError, refetch } = useCart();
-    const [paymentMethod, setPaymentMethod] = useState('Cash');
-    const { mutate: ChekoutMutation, isPending: isPendingChekout } = useChekout();
-    const handlePaymentMethod = (event) => {
-        console.log(event.target.value);
-      setPaymentMethod(event.target.value);
-    };
+  const { data, isLoading, isError, refetch } = useCart();
+  const [paymentMethod, setPaymentMethod] = useState('Cash');
+  const { mutate: ChekoutMutation, isPending: isPendingChekout } = useChekout();
+  const handlePaymentMethod = (event) => {
+    setPaymentMethod(event.target.value);
+  };
   const handleChekout = () => {
-      ChekoutMutation(paymentMethod, {
-          onSuccess: (response) => {
-              console.log('Response data:', response);
-          const url = response.data?.url; 
-          console.log('Checkout successful:', url);
-          if (url) {
-            window.location.href = url;  
-          } else {
-            alert(response.data?.message || 'Checkout failed');
-          }
-        },
-      });
+    ChekoutMutation(paymentMethod, {
+      onSuccess: (response) => {
+        const url = response.data?.url;
+        if (url) {
+          window.location.href = url;
+        } else {
+          alert(response.data?.message || 'Checkout failed');
+        }
+      },
+    });
   };
   if (isLoading) {
     return (
@@ -140,7 +136,7 @@ export default function Chekout() {
             {data?.items?.length > 0 && (
               <TableRow>
                 <TableCell
-                  colSpan={3}
+                  colSpan={2}
                   sx={{ fontWeight: 'bold', textAlign: 'right', fontSize: 16 }}
                 >
                   {t('cart_total')}:
@@ -161,22 +157,69 @@ export default function Chekout() {
             )}
           </TableBody>
         </Table>
-        <FormControl fullWidth sx={{ m: 4, maxWidth: 300 }}>
-          <InputLabel>Payment Method</InputLabel>
-          <Select onChange={handlePaymentMethod} value={paymentMethod} label="Payment Method">
-            <MenuItem value="Cash">Cash</MenuItem>
-            <MenuItem value="Visa">Visa</MenuItem>
-          </Select>
-        </FormControl>
-        <Button
-          onClick={handleChekout}
-            disabled={isPendingChekout}
-          sx={{ m: 4 }}
-          variant="contained"
-          color="primary"
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: 3,
+            justifyContent: 'center',
+            alignItems: 'center',
+            m: 4,
+          }}
         >
-          {isPendingChekout ? 'Redirecting...' : t('pay_now')}
-        </Button>
+          {/* Select Payment Method */}
+          <FormControl
+            fullWidth
+            sx={{
+              maxWidth: 300,
+              '& .MuiInputLabel-root': { fontWeight: 500, color: '#555' },
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                bgcolor: '#f5f7fa',
+                '&:hover fieldset': { borderColor: '#1976d2' },
+              },
+            }}
+          >
+            <InputLabel>Payment Method</InputLabel>
+            <Select
+              onChange={handlePaymentMethod}
+              value={paymentMethod}
+              label="Payment Method"
+              sx={{
+                fontWeight: 500,
+                color: '#111',
+              }}
+            >
+              <MenuItem value="Cash">Cash</MenuItem>
+              <MenuItem value="Visa">Visa</MenuItem>
+            </Select>
+          </FormControl>
+
+          {/* Checkout Button */}
+          <Button
+            onClick={handleChekout}
+            disabled={isPendingChekout}
+            sx={{
+              px: 5,
+              py: 1.5,
+              borderRadius: 2,
+              fontWeight: 'bold',
+              fontSize: 16,
+              textTransform: 'none',
+              bgcolor: '#1976d2',
+              color: '#fff',
+              '&:hover': {
+                bgcolor: '#115293',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+              },
+              transition: 'all 0.2s ease',
+            }}
+            variant="contained"
+          >
+            {isPendingChekout ? 'Redirecting...' : t('pay_now')}
+          </Button>
+        </Box>
       </TableContainer>
     </Box>
   );

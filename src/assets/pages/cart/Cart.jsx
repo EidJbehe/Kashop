@@ -20,10 +20,10 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 export default function Cart() {
-    const { t, i18n } = useTranslation();
-  
+  const { t, i18n } = useTranslation();
+
   const { data, isLoading, isError, refetch } = useCart();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const { mutate: deleteFromCart, isPending } = useRemoveFromCare();
   const { mutate: updateCount, isPending: isPendingUpdate } = useUpdateCount();
   const handleUpdateCount = (productId, action) => {
@@ -60,6 +60,7 @@ export default function Cart() {
       </Box>
     );
   }
+  console.log(data);
 
   return (
     <Box component="section" sx={{ p: 4, bgcolor: '#f9f9f9', minHeight: '100vh' }}>
@@ -103,6 +104,7 @@ export default function Cart() {
               ))}
             </TableRow>
           </TableHead>
+
 
           <TableBody>
             {data?.items?.map((item) => (
@@ -180,11 +182,58 @@ export default function Cart() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, p: 2 }}>
-        <Button variant="contained" color="primary" onClick={() => navigate('/checkout')}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          mt: 4,
+          p: 2,
+          maxWidth: 600, 
+          margin: 'auto',
+          gap: 2,    
+        }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/checkout')}
+          sx={{
+            flex: 1,
+            fontWeight: 'bold',
+            py: 1.5,
+            borderRadius: 2,
+            textTransform: 'none',
+            bgcolor: '#535a61',
+            '&:hover': {
+              bgcolor: '#3f7cb9',
+              transform: 'translateY(-2px)',
+            },
+            transition: 'all 0.2s ease',
+          }}
+        >
           {t('proceed_to_checkout')}
         </Button>
-        <Button variant="outlined" color="secondary" onClick={() => navigate('/home')}>
+
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => navigate('/home')}
+          sx={{
+            flex: 1,
+            fontWeight: 'bold',
+            py: 1.5,
+            borderRadius: 2,
+            textTransform: 'none',
+            borderColor: '#90caf9',
+            color: '#1976d2',
+            '&:hover': {
+              bgcolor: '#e3f2fd',
+              borderColor: '#1976d2',
+              transform: 'translateY(-2px)',
+            },
+            transition: 'all 0.2s ease',
+          }}
+        >
           {t('continue_shopping')}
         </Button>
       </Box>

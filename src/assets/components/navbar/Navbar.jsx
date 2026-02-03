@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -19,6 +19,9 @@ import NavLogo from './navbarImages/Logo-navbar.svg';
 import { Link } from 'react-router-dom';
 import useAuthStore from '../../store/AuthStore';
 import { useTranslation } from 'react-i18next';
+import useThemeStore from '../../store/useThemeStore';
+// import DarkModeIcon from '@mui/icons-material/DarkMode';
+// import LightModeIcon from '@mui/icons-material/LightMode';
 
 // ======= Styled NavLink =======
 const NavLink = styled(Link)(({ theme }) => ({
@@ -62,6 +65,20 @@ export default function Navbar() {
     lng = i18n.language === 'en' ? 'ar' : 'en';
     i18n.changeLanguage(lng);
   };
+  
+  const themeMode = useThemeStore((state) => state.themeMode);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
+  const searchInputProps = useMemo(
+    () => ({
+      startAdornment: (
+        <InputAdornment position="start">
+          <SearchIcon sx={{ color: '#8c8c8c' }} />
+        </InputAdornment>
+      ),
+    }),
+    []
+  );
+  
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -76,6 +93,7 @@ export default function Navbar() {
             placeholder={t('Search')}
             sx={{
               mx: 2,
+              display: { xs: 'none', md: 'flex' },
 
               width: 300,
               backgroundColor: '#f2f2f2',
@@ -93,13 +111,7 @@ export default function Navbar() {
                 },
               },
             }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: '#8c8c8c' }} />
-                </InputAdornment>
-              ),
-            }}
+            InputProps={searchInputProps}
           />
 
           <Box sx={{ flexGrow: 1 }} />
@@ -127,7 +139,6 @@ export default function Navbar() {
                     {user.name}
                   </Box>
                 </Typography>
-
                 {/* Icons */}
                 <IconButton component={Link} to="/cart" size="large" aria-label="Cart">
                   <Badge badgeContent={3} color="error">
@@ -160,6 +171,26 @@ export default function Navbar() {
                   }}
                 >
                   {i18n.language === 'en' ? 'AR' : 'EN'}
+                </Button>
+
+                <Button
+                  onClick={toggleTheme}
+                  sx={{
+                    width: 38,
+                    height: 38,
+                    minWidth: 38,
+                    borderRadius: '50%',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    color: '#444',
+                    backgroundColor: '#f5f5f5',
+                    border: '1px solid #e5e5e5',
+                    '&:hover': {
+                      backgroundColor: '#ededed',
+                    },
+                  }}
+                >
+                  {themeMode === 'light' ? 'light' : 'dark'}
                 </Button>
               </>
             ) : (

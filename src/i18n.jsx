@@ -45,6 +45,7 @@ i18n.use(initReactI18next).init({
         proceed_to_checkout: 'Proceed to Checkout',
         continue_shopping: 'Continue Shopping',
         pay_now: 'Pay Now',
+        loading_profile_error: 'Error loading profile.',
       },
     },
 
@@ -90,6 +91,7 @@ i18n.use(initReactI18next).init({
         proceed_to_checkout: 'المتابعة إلى الدفع',
         continue_shopping: 'متابعة التسوق',
         pay_now: 'ادفع الآن',
+        loading_profile_error: 'خطأ في تحميل الملف الشخصي.',
       },
     },
   },

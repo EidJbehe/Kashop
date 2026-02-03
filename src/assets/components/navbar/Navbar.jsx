@@ -20,8 +20,8 @@ import { Link } from 'react-router-dom';
 import useAuthStore from '../../store/AuthStore';
 import { useTranslation } from 'react-i18next';
 import useThemeStore from '../../store/useThemeStore';
-// import DarkModeIcon from '@mui/icons-material/DarkMode';
-// import LightModeIcon from '@mui/icons-material/LightMode';
+import Profile from '../../pages/profile/ProfileLayout';
+import { textAlign } from '@mui/system';
 
 // ======= Styled NavLink =======
 const NavLink = styled(Link)(({ theme }) => ({
@@ -65,7 +65,7 @@ export default function Navbar() {
     lng = i18n.language === 'en' ? 'ar' : 'en';
     i18n.changeLanguage(lng);
   };
-  
+
   const themeMode = useThemeStore((state) => state.themeMode);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
   const searchInputProps = useMemo(
@@ -78,7 +78,6 @@ export default function Navbar() {
     }),
     []
   );
-  
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -130,7 +129,8 @@ export default function Navbar() {
                     fontSize: '15px',
                     color: '#444',
                     mr: 1,
-                    display: 'flex',
+                    display: 'flex ',
+
                     alignItems: 'center',
                   }}
                 >
@@ -139,12 +139,14 @@ export default function Navbar() {
                     {user.name}
                   </Box>
                 </Typography>
+                <NavLink to="/profile">{t('Profile')}</NavLink>
                 {/* Icons */}
                 <IconButton component={Link} to="/cart" size="large" aria-label="Cart">
                   <Badge badgeContent={3} color="error">
                     <ShoppingCartIcon sx={{ color: '#000' }} />
                   </Badge>
                 </IconButton>
+
                 <IconButton
                   size="large"
                   aria-label="Logout"
@@ -272,6 +274,16 @@ export default function Navbar() {
         <MenuItem component={Link} to="/contact" onClick={handleMobileClose}>
           <Typography textAlign="center">{t('Contact')}</Typography>
         </MenuItem>
+        <NavLink
+          sx={{
+            textAlign: 'center',
+            display: 'block',
+            padding: '10px 0',
+          }}
+          to="/profile"
+        >
+          {t('Profile')}
+        </NavLink>
 
         {!token && (
           <MenuItem component={Link} to="/login" onClick={handleMobileClose}>

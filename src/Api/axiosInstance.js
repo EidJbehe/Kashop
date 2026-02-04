@@ -4,6 +4,7 @@ import useAuthStore from '../assets/store/AuthStore';
 
 const axiosInstance = axios.create({
   baseURL: 'https://knowledgeshop.runasp.net/api',
+  withCredentials: true,
 });
 
 

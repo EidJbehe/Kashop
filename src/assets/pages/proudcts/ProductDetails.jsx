@@ -17,12 +17,12 @@ import useAddToCart from '../../../hooks/useAddToCart';
 import { useTranslation } from 'react-i18next';
 
 export default function ProductDetails() {
-    const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const { id } = useParams();
   const { isLoading, isError, data } = useProductDetails(id);
-  const {mutate:addToCart,isPending }=useAddToCart();
+  const { mutate: addToCart, isPending } = useAddToCart();
 
   // Scroll to top on page load
   useEffect(() => {
@@ -42,7 +42,6 @@ export default function ProductDetails() {
   }
 
   const product = data.response;
-  console.log('Product Details:', product);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -112,13 +111,12 @@ export default function ProductDetails() {
                   )}
                 </Button>
                 <Button
-                variant="outlined"
-                onClick={() => navigate(`/Products/${product.id}/reviews`)}
-              >
-                Show Reviews
-              </Button>
+                  variant="outlined"
+                  onClick={() => navigate(`/Products/${product.id}/reviews`)}
+                >
+                  Show Reviews
+                </Button>
               </Box>
-              
             </CardContent>
           </Grid>
         </Grid>

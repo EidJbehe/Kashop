@@ -60,7 +60,6 @@ export default function Cart() {
       </Box>
     );
   }
-  console.log(data);
 
   return (
     <Box component="section" sx={{ p: 4, bgcolor: '#f9f9f9', minHeight: '100vh' }}>
@@ -217,7 +216,7 @@ export default function Cart() {
         <Button
           variant="outlined"
           color="secondary"
-          onClick={() => navigate('/home')}
+          onClick={() => navigate('/Products')}
           sx={{
             flex: 1,
             fontWeight: 'bold',

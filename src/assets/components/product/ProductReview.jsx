@@ -10,9 +10,8 @@ const ProductReview = () => {
   const navigate = useNavigate();
 
   const { data, isLoading } = useProductDetails(productId);
-  
-    const reviews = data?.response?.reviews || [];
-    console.log('Product Reviews:', reviews);
+
+  const reviews = data?.response?.reviews || [];
   const { mutate: addReview, isPending } = useAddReview(productId);
 
   const [rating, setRating] = useState(0);

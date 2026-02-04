@@ -18,7 +18,7 @@ export default function About() {
       </Typography>
 
       <Grid container spacing={4} justifyContent="center">
-        <Grid item xs={12} sm={4}>
+        <Grid size={{xs:12,sm:4} } >
           <Card sx={{ textAlign: 'center', p: 2 }}>
             <InfoIcon sx={{ fontSize: 50, color: '#1976d2', mb: 2 }} />
             <CardContent>
@@ -32,7 +32,7 @@ export default function About() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={4}>
+        <Grid size={{xs:12,sm:4} } >
           <Card sx={{ textAlign: 'center', p: 2 }}>
             <HistoryIcon sx={{ fontSize: 50, color: '#1976d2', mb: 2 }} />
             <CardContent>
@@ -46,7 +46,7 @@ export default function About() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={4}>
+        <Grid size={{xs:12,sm:4} } >
           <Card sx={{ textAlign: 'center', p: 2 }}>
             <StarIcon sx={{ fontSize: 50, color: '#1976d2', mb: 2 }} />
             <CardContent>

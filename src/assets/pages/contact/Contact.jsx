@@ -11,7 +11,7 @@ export default function Contact() {
 
       <Grid container spacing={6} justifyContent="center">
         {/* Contact Info */}
-        <Grid item xs={12} md={5}>
+        <Grid size={{xs:12,md:5} } >
           <Typography variant="h6" mb={2}>
             Get in Touch
           </Typography>
@@ -21,7 +21,7 @@ export default function Contact() {
         </Grid>
 
         {/* Contact Form */}
-        <Grid item xs={12} md={5}>
+        <Grid size={{xs:12,md:5} } >
           <Box component="form">
             <TextField fullWidth label="Name" size="small" sx={{ mb: 2 }} />
             <TextField fullWidth label="Email" size="small" sx={{ mb: 2 }} />

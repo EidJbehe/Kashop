@@ -18,6 +18,7 @@ import ProfileInfo from './assets/pages/profile/ProfileInfo.jsx';
 import ProfileLayout from './assets/pages/profile/ProfileLayout.jsx';
 import Products from './assets/pages/proudcts/Products.jsx';
 import CreateProduct from './assets/pages/proudcts/CreateProduct.jsx';
+import ProductReview from './assets/components/product/ProductReview.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -63,6 +64,9 @@ const router = createBrowserRouter([
       }, {
         path: '/Products/create',
         element: <CreateProduct />,
+      }, {
+        path:"/Products/:productId/reviews",
+          element:<ProductReview />
       },
       {
         path: 'login',

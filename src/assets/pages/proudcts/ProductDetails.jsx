@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useProductDetails } from '../../../hooks/useProductDetails';
 import {
   Box,
@@ -18,7 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 export default function ProductDetails() {
     const { t, i18n } = useTranslation();
-  
+  const navigate = useNavigate();
+
   const { id } = useParams();
   const { isLoading, isError, data } = useProductDetails(id);
   const {mutate:addToCart,isPending }=useAddToCart();
@@ -97,7 +98,7 @@ export default function ProductDetails() {
               </Box>
 
               {/* Add to Cart Button */}
-              <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2, gap: 2 }}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -110,7 +111,14 @@ export default function ProductDetails() {
                     t('add_to_cart')
                   )}
                 </Button>
+                <Button
+                variant="outlined"
+                onClick={() => navigate(`/Products/${product.id}/reviews`)}
+              >
+                Show Reviews
+              </Button>
               </Box>
+              
             </CardContent>
           </Grid>
         </Grid>

@@ -35,8 +35,8 @@ export default function Chekout() {
         if (url) {
           window.location.href = url;
         } else {
-          alert(response.data?.message || 'Checkout failed');
-        }
+ alert(response.data?.message || 'Order placed successfully');
+        window.location.href = '/';        }
       },
     });
   };

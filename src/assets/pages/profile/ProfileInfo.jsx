@@ -7,7 +7,6 @@ import { textAlign } from '@mui/system';
 export default function ProfileInfo() {
   const { data, isError, isLoading } = useProfile();
   console.log(data);
-
   if (isLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>

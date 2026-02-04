@@ -16,13 +16,15 @@ import Profile from './assets/pages/profile/ProfileLayout.jsx';
 import ProfileOrders from './assets/pages/profile/ProfileOrders.jsx';
 import ProfileInfo from './assets/pages/profile/ProfileInfo.jsx';
 import ProfileLayout from './assets/pages/profile/ProfileLayout.jsx';
+import Products from './assets/pages/proudcts/Products.jsx';
+import CreateProduct from './assets/pages/proudcts/CreateProduct.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
     children: [
       {
-        path: 'home',
+        path: '/',
         element: <Home />,
       },
       {
@@ -54,6 +56,13 @@ const router = createBrowserRouter([
       {
         path: 'Products/:id',
         element: <ProudctDetails />,
+      }, {
+        path: '/Products',
+        element: <Products />,
+        
+      }, {
+        path: '/Products/create',
+        element: <CreateProduct />,
       },
       {
         path: 'login',

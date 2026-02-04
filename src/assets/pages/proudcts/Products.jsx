@@ -1,15 +1,44 @@
-import React from 'react';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material';
+import React, { useState } from 'react';
 import { useProducts } from '../../../hooks/useProducts';
-import { Card, CardContent, CardMedia, CircularProgress, Typography } from '@mui/material';
-import { Box, Grid, height } from '@mui/system';
+import { t } from 'i18next';
+import Product from "../../components/product/Proudct";
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Outlet } from 'react-router-dom';
 
-export default function Proudcts() {
-    const { t, i18n } = useTranslation();
-  
-  const { isLoading, isError, data } = useProducts();
-const products = data?.response?.data ?? [];
+
+export default function Products() {
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      search: '',
+      categoryId: '',
+      minPrice: '',
+      maxPrice: '',
+    },
+  });
+
+  const [activeFilter, setActiveFilter] = useState({});
+  const { isLoading, isError, data } = useProducts(activeFilter);
+  const products = data?.response?.data ?? [];
+
+  const applyFilter = (values) => {
+    setActiveFilter({
+      search: values.search || null,
+      categoryId: values.categoryId || null,
+      minPrice: values.minPrice || null,
+      maxPrice: values.maxPrice || null,
+    });
+  };
 
   if (isLoading) {
     return (
@@ -18,95 +47,81 @@ const products = data?.response?.data ?? [];
       </Box>
     );
   }
+
   if (isError) {
-    return <Box sx={{ color: 'red' }}>Error loading categories.</Box>;
+    return <Box sx={{ color: 'red' }}>Error loading products.</Box>;
   }
-return (
-  <Box p={3} sx={{ backgroundColor: "#fafafa", minHeight: "100vh" }}>
-    <Typography
-      variant="h4"
-      mb={4}
-      fontWeight={600}
-      sx={{ color: "#2c2c2c", textAlign: 'center', mb: 4 }}
-    >
-      {t("Products")}
-    </Typography>
 
-    <Grid container spacing={3}>
-      {products.map((product) => (
-        <Grid
-          size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
-          key={product.id}
-        >
-          <Link
-            to={`/Products/${product.id}`}
-            style={{ textDecoration: "none" }}
-          >
-            <Card
-              sx={{
-                height: "100%",
-                borderRadius: 2,
-                overflow: "hidden",
-                backgroundColor: "#ffffff",
-                border: "1px solid #ededed",
-                transition: "all 0.3s ease",
-                boxShadow: "none",
-                "&:hover": {
-                  transform: "translateY(-5px)",
-                  boxShadow: "0 10px 24px rgba(0,0,0,0.08)",
-                },
-              }}
-            >
-              {/* Image */}
-              <Box
-                sx={{
-                  width: "100%",
-                  height: 230,
-                  backgroundColor: "#f3f3f3",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  image={product.image}
-                  alt={product.name}
-                  sx={{
-                    height: "100%",
-                    objectFit: "contain",
-                  }}
+  return (
+    <Box p={3} sx={{ backgroundColor: '#fafafa', minHeight: '100vh' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2, maxWidth: 900, mx: 'auto' }}>
+        <Button component={Link} to="create" variant="contained">
+          Create Product
+        </Button>
+      </Box>
+      {/* Filters */}
+      <Card sx={{ maxWidth: 900, mx: 'auto', mb: 4 }}>
+        <CardContent>
+          <Typography variant="h6" mb={2}>
+            Filters
+          </Typography>
+
+          <Box component="form" onSubmit={handleSubmit(applyFilter)}>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField fullWidth size="small" label="Search Products" {...register('search')} />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField fullWidth size="small" label="Category ID" {...register('categoryId')} />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Min Price"
+                  type="number"
+                  {...register('minPrice')}
                 />
-              </Box>
+              </Grid>
 
-              {/* Content */}
-              <CardContent sx={{ p: 2.5 }}>
-                <Typography
-                  sx={{
-                    fontSize: "15px",
-                    fontWeight: 500,
-                    color: "#2f2f2f",
-                    mb: 1,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {product.name}
-                </Typography>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Max Price"
+                  type="number"
+                  {...register('maxPrice')}
+                />
+              </Grid>
 
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "#6b6b6b",
-                  }}
-                >
-                  ${product.price}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Link>
-        </Grid>
-      ))}
-    </Grid>
-  </Box>
-);
+              <Grid size={{ xs: 12 }} sx={{ textAlign: 'center', mt: 2 }}>
+                <Button type="submit" variant="contained">
+                  Apply Filters
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </CardContent>
+      </Card>
+
+      {/* Title */}
+      <Typography
+        variant="h4"
+        fontWeight={600}
+        sx={{ color: '#2c2c2c', textAlign: 'center', mb: 4 }}
+      >
+        {t('Products')}
+      </Typography>
+
+      {/* Products */}
+      <Grid container spacing={3}>
+        {products.map((product) => (
+          <Product key={product.id} product={product} />
+        ))}
+      </Grid>
+   
+    </Box>
+  );
 }

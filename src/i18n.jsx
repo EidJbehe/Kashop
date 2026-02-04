@@ -1,4 +1,5 @@
 import i18n from 'i18next';
+import { Profiler } from 'react';
 import { initReactI18next } from 'react-i18next';
 
 i18n.use(initReactI18next).init({
@@ -46,6 +47,8 @@ i18n.use(initReactI18next).init({
         continue_shopping: 'Continue Shopping',
         pay_now: 'Pay Now',
         loading_profile_error: 'Error loading profile.',
+        About: 'About',
+        Profile: 'Profile',
       },
     },
 
@@ -57,6 +60,7 @@ i18n.use(initReactI18next).init({
         About: 'معلومات عنا',
         Contact: 'تواصل معنا',
         Cart: 'عربة التسوق',
+        Profile: 'الملف الشخصي',
         Products: 'المنتجات',
         add_to_cart: 'أضف إلى السلة',
         Remove: 'إزالة',

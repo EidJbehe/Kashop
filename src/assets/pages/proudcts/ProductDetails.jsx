@@ -41,6 +41,7 @@ export default function ProductDetails() {
   }
 
   const product = data.response;
+  console.log('Product Details:', product);
 
   return (
     <Box sx={{ p: 3 }}>

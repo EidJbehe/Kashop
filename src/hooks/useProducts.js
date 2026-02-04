@@ -3,7 +3,7 @@ import axiosInstance from "../Api/axiosInstance"
 import { useFetch } from "./useFetch";
 import i18n from "../i18n";
 
-export function useProducts() { 
+export function useProducts(filters={}) { 
 
-  return useFetch(['product', i18n.language], '/Products?limit=1000');
+  return useFetch(['product', i18n.language, filters], '/Products', filters);
 }

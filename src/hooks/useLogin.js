@@ -28,7 +28,7 @@ export default function useLogin() {
           role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
         };
         setUser(user);
-        navigate('/home');
+        navigate('/');
       } else {
         setServerErrors([response.data?.message || 'Login failed, please try again']);
       }

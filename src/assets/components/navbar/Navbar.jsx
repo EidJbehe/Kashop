@@ -10,7 +10,6 @@ import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -68,16 +67,7 @@ export default function Navbar() {
 
   const themeMode = useThemeStore((state) => state.themeMode);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
-  const searchInputProps = useMemo(
-    () => ({
-      startAdornment: (
-        <InputAdornment position="start">
-          <SearchIcon sx={{ color: '#8c8c8c' }} />
-        </InputAdornment>
-      ),
-    }),
-    []
-  );
+ 
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -85,39 +75,11 @@ export default function Navbar() {
         <Toolbar sx={{ p: 0, minHeight: 64, px: 2 }}>
           {/* Logo */}
           <Box component="img" sx={{ height: 40, flexShrink: 0, mr: 2 }} src={NavLogo} alt="Logo" />
-
-          {/* Desktop Search */}
-          <TextField
-            size="small"
-            placeholder={t('Search')}
-            sx={{
-              mx: 2,
-              display: { xs: 'none', md: 'flex' },
-
-              width: 300,
-              backgroundColor: '#f2f2f2',
-              borderRadius: 2,
-              '& .MuiOutlinedInput-root': {
-                borderRadius: 2,
-                '& fieldset': {
-                  borderColor: '#e0e0e0',
-                },
-                '&:hover fieldset': {
-                  borderColor: '#d6d6d6',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#bdbdbd',
-                },
-              },
-            }}
-            InputProps={searchInputProps}
-          />
-
           <Box sx={{ flexGrow: 1 }} />
 
           {/* Desktop Links */}
           <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 3 }}>
-            <NavLink to="/home">{t('Home')}</NavLink>
+            <NavLink to="/">{t('Home')}</NavLink>
             <NavLink to="/about">{t('About')}</NavLink>
             <NavLink to="/contact">{t('Contact')}</NavLink>
 
@@ -142,7 +104,7 @@ export default function Navbar() {
                 <NavLink to="/profile">{t('Profile')}</NavLink>
                 {/* Icons */}
                 <IconButton component={Link} to="/cart" size="large" aria-label="Cart">
-                  <Badge badgeContent={3} color="error">
+                  <Badge color="error">
                     <ShoppingCartIcon sx={{ color: '#000' }} />
                   </Badge>
                 </IconButton>

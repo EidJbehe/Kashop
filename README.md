@@ -7,8 +7,7 @@ This project demonstrates real-world front-end practices, including **token-base
 ---
 
 ## 🌐 Live Demo
-
-> *Coming soon* (can be deployed easily to Vercel / Netlify)
+https://ka-shop-op3g.onrender.com
 
 ---
 

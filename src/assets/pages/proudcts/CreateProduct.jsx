@@ -22,7 +22,7 @@ export default function CreateProduct() {
 
  
   const { isLoading: isCategoriesLoading, isError: isCategoriesError, data } = useCategories();
-    const categories = data?.response?? [];
+    const categories = data?.response?.data?? [];
   
 
   const { register, handleSubmit, reset, setValue, watch } = useForm({

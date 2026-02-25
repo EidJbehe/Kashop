@@ -19,13 +19,10 @@ export default function ProfileLayout(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const handleDrawerToggle = () => setMobileOpen((prev) => !prev);
 
   const drawer = (
-    <Box>
-      <Toolbar />
+    <Box sx={{ pt: 2 }}>
       <List>
         <ListItem disablePadding>
           <ListItemButton component={NavLink} to="">
@@ -46,7 +43,9 @@ export default function ProfileLayout(props) {
 
   return (
     <Box sx={{ display: 'flex' }}>
+      {/* Sidebar */}
       <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+        {/* Mobile Drawer */}
         <Drawer
           container={container}
           variant="temporary"
@@ -55,12 +54,13 @@ export default function ProfileLayout(props) {
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { width: drawerWidth },
+            '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box' },
           }}
         >
           {drawer}
         </Drawer>
 
+        {/* Desktop Drawer */}
         <Drawer
           variant="permanent"
           open
@@ -69,9 +69,13 @@ export default function ProfileLayout(props) {
             '& .MuiDrawer-paper': {
               width: drawerWidth,
               boxSizing: 'border-box',
-              position: 'fixed',
-              top: '64px',
-              height: 'calc(100% - 64px)',
+
+              // ✅ مهم: ما يغطي الفوتر/المحتوى
+              position: 'sticky',
+              top: { xs: 56, sm: 64 }, // ارتفاع الـ Navbar (عدّلها إذا عندك مختلف)
+              height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+              overflowY: 'auto',
+
               borderRight: 'none',
               boxShadow: 'none',
             },
@@ -81,6 +85,7 @@ export default function ProfileLayout(props) {
         </Drawer>
       </Box>
 
+      {/* Content */}
       <Box
         component="main"
         sx={{
@@ -89,8 +94,10 @@ export default function ProfileLayout(props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
+        {/* هذا لتعويض مساحة الـ AppBar في الأعلى */}
         <Toolbar />
 
+        {/* زر القائمة بالموبايل */}
         <IconButton onClick={handleDrawerToggle} sx={{ display: { sm: 'none' }, mb: 2 }}>
           <MenuIcon />
         </IconButton>

@@ -67,7 +67,7 @@ export default function Footer() {
           </Grid>
 
           {/* Contact */}
-          <Grid v>
+          <Grid >
             <Typography fontWeight="bold" gutterBottom>
               {t('Contact')}
             </Typography>

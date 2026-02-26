@@ -70,9 +70,8 @@ export default function ProfileLayout(props) {
               width: drawerWidth,
               boxSizing: 'border-box',
 
-              // ✅ مهم: ما يغطي الفوتر/المحتوى
               position: 'sticky',
-              top: { xs: 56, sm: 64 }, // ارتفاع الـ Navbar (عدّلها إذا عندك مختلف)
+              top: { xs: 56, sm: 64 },
               height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
               overflowY: 'auto',
 

@@ -19,12 +19,9 @@ import { useTranslation } from "react-i18next";
 
 export default function ResetPassword() {
     const { t, i18n } = useTranslation();
-  
   const navigate = useNavigate();
   const location = useLocation();
   const emailFromState = location.state?.email || "";
-
-
   const {
     register,
     handleSubmit,

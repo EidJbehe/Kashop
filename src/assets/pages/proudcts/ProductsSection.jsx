@@ -8,7 +8,6 @@ import Product from "../../components/product/Proudct";
 
 export default function ProudctsSection() {
   const { t, i18n } = useTranslation();
-
   const { isLoading, isError, data } = useProducts();
   const products = data?.response?.data ?? [];
 
@@ -40,7 +39,7 @@ export default function ProudctsSection() {
       </Grid>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
         <Button variant="contained" component={Link} to="/Products">
-          Show All Products
+          {t('Show_All_Products')}
         </Button>
       </Box>
     </Box>

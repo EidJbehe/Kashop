@@ -47,6 +47,7 @@ i18n.use(initReactI18next).init({
         pay_now: 'Pay Now',
         loading_profile_error: 'Error loading profile.',
         Profile: 'Profile',
+        Show_All_Products:'Show All Products'
       },
     },
 
@@ -93,6 +94,7 @@ i18n.use(initReactI18next).init({
         continue_shopping: 'متابعة التسوق',
         pay_now: 'ادفع الآن',
         loading_profile_error: 'خطأ في تحميل الملف الشخصي.',
+        Show_All_Products:'عرض جميع المنتجات '
       },
     },
   },

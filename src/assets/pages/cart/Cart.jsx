@@ -13,7 +13,7 @@ import {
   CircularProgress,
   Box,
 } from '@mui/material';
-import useRemoveFromCare from '../../../hooks/useRemoveFromCart';
+import useRemoveFromCart from '../../../hooks/useRemoveFromCart';
 import useUpdateCount from '../../../hooks/useUpdateCartItem';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -24,7 +24,7 @@ export default function Cart() {
 
   const { data, isLoading, isError, refetch } = useCart();
   const navigate = useNavigate();
-  const { mutate: deleteFromCart, isPending } = useRemoveFromCare();
+  const { mutate: deleteFromCart, isPending } = useRemoveFromCart();
   const { mutate: updateCount, isPending: isPendingUpdate } = useUpdateCount();
   const handleUpdateCount = (productId, action) => {
     const currentItem = data.items.find((item) => item.productId === productId);

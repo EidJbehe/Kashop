@@ -92,7 +92,6 @@ export default function Navbar() {
                     color: '#444',
                     mr: 1,
                     display: 'flex ',
-
                     alignItems: 'center',
                   }}
                 >
